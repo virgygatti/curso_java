@@ -1,25 +1,31 @@
-package com.facturacion.model;
+package com.facturacion.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.Objects;
 
-/**
- * Representa al cliente del comercio que realiza compras.
- */
+@Entity
+@Table(name = "cliente")
 public class Cliente {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank
+    @Column(nullable = false, length = 100)
     private String nombre;
+
+    @NotBlank
+    @Column(nullable = false, length = 100)
     private String apellido;
+
+    @NotBlank
+    @Column(nullable = false, unique = true, length = 20)
     private String documento;
 
     public Cliente() {
-    }
-
-    public Cliente(Long id, String nombre, String apellido, String documento) {
-        this.id = id;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.documento = documento;
     }
 
     public Long getId() {
@@ -54,9 +60,6 @@ public class Cliente {
         this.documento = documento;
     }
 
-    /**
-     * Nombre completo para mostrar en comprobantes.
-     */
     public String getNombreCompleto() {
         if (nombre == null && apellido == null) {
             return "";
@@ -75,21 +78,14 @@ public class Cliente {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Cliente cliente)) {
             return false;
         }
-        Cliente cliente = (Cliente) o;
         return Objects.equals(id, cliente.id);
     }
 
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Cliente{id=" + id + ", nombre='" + nombre + "', apellido='" + apellido
-                + "', documento='" + documento + "'}";
     }
 }
