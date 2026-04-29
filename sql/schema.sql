@@ -1,4 +1,4 @@
--- Script DDL para el modelo de Facturación (primera entrega).
+-- Script DDL para el modelo de Facturación.
 -- Compatible con MySQL 8+ (utf8mb4). Ajustá el nombre de la base si tu curso usa otro motor.
 
 CREATE DATABASE IF NOT EXISTS facturacion

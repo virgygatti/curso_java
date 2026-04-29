@@ -1,0 +1,230 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Facturacion API",
+		"description": "API REST Facturacion (Spring Boot). Variable `baseUrl` por defecto http://localhost:8080. Tras crear cliente/producto/comprobante, copia los `id` de la respuesta a las variables `clienteId`, `productoId`, `comprobanteId`, `lineaId` para probar GET/PUT/DELETE.\n\nErrores de negocio y validacion: HTTP 409 con cuerpo `{ \"errores\": [ \"...\" ] }`.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{ "key": "baseUrl", "value": "http://localhost:8080" },
+		{ "key": "clienteId", "value": "1" },
+		{ "key": "productoId", "value": "1" },
+		{ "key": "productoId2", "value": "2" },
+		{ "key": "comprobanteId", "value": "1" },
+		{ "key": "lineaId", "value": "1" }
+	],
+	"item": [
+		{
+			"name": "Clientes",
+			"item": [
+				{
+					"name": "Listar clientes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/clientes"
+					}
+				},
+				{
+					"name": "Obtener cliente por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/clientes/{{clienteId}}"
+					}
+				},
+				{
+					"name": "Crear cliente",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Juan\",\n  \"apellido\": \"Perez\",\n  \"documento\": \"DOC-UNICO-01\"\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": "{{baseUrl}}/api/clientes"
+					}
+				},
+				{
+					"name": "Actualizar cliente",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Juan Actualizado\",\n  \"apellido\": \"Perez\",\n  \"documento\": \"DOC-UNICO-01\"\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": "{{baseUrl}}/api/clientes/{{clienteId}}"
+					}
+				},
+				{
+					"name": "Eliminar cliente",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseUrl}}/api/clientes/{{clienteId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Productos",
+			"item": [
+				{
+					"name": "Listar productos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/productos"
+					}
+				},
+				{
+					"name": "Obtener producto por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/productos/{{productoId}}"
+					}
+				},
+				{
+					"name": "Crear producto",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"codigo\": \"SKU-UNICO-01\",\n  \"nombre\": \"Producto demo\",\n  \"descripcion\": \"Descripcion\",\n  \"precio\": 99.99,\n  \"stock\": 100\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": "{{baseUrl}}/api/productos"
+					}
+				},
+				{
+					"name": "Actualizar producto",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"codigo\": \"SKU-UNICO-01\",\n  \"nombre\": \"Producto demo\",\n  \"descripcion\": \"Actualizado\",\n  \"precio\": 109.99,\n  \"stock\": 90\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": "{{baseUrl}}/api/productos/{{productoId}}"
+					}
+				},
+				{
+					"name": "Eliminar producto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseUrl}}/api/productos/{{productoId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Comprobantes",
+			"item": [
+				{
+					"name": "Listar comprobantes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/comprobantes"
+					}
+				},
+				{
+					"name": "Obtener comprobante por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/comprobantes/{{comprobanteId}}"
+					}
+				},
+				{
+					"name": "Crear comprobante (anidado clienteid / productoid)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cliente\": {\n    \"clienteid\": {{clienteId}}\n  },\n  \"lineas\": [\n    {\n      \"cantidad\": 2,\n      \"producto\": {\n        \"productoid\": {{productoId}}\n      }\n    },\n    {\n      \"cantidad\": 1,\n      \"producto\": {\n        \"productoid\": {{productoId2}}\n      }\n    }\n  ]\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": "{{baseUrl}}/api/comprobantes"
+					}
+				},
+				{
+					"name": "Eliminar comprobante",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseUrl}}/api/comprobantes/{{comprobanteId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Lineas de comprobante",
+			"item": [
+				{
+					"name": "Listar lineas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/lineas-comprobante"
+					}
+				},
+				{
+					"name": "Obtener linea por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/lineas-comprobante/{{lineaId}}"
+					}
+				},
+				{
+					"name": "Eliminar linea",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseUrl}}/api/lineas-comprobante/{{lineaId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Documentacion OpenAPI",
+			"item": [
+				{
+					"name": "Swagger UI",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/swagger-ui/index.html"
+					}
+				},
+				{
+					"name": "OpenAPI JSON",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/v3/api-docs"
+					}
+				}
+			]
+		}
+	]
+}

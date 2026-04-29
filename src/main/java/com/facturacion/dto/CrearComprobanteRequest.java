@@ -1,5 +1,6 @@
 package com.facturacion.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -7,47 +8,59 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
+/**
+ * Body POST comprobante según consigna entrega final (clienteid / productoid en minúsculas).
+ */
 public class CrearComprobanteRequest {
 
-    @NotNull(message = "clienteId es obligatorio")
-    private Long clienteId;
+    @NotNull(message = "cliente es obligatorio")
+    @Valid
+    private ClienteNested cliente;
 
     @NotEmpty(message = "Debe incluir al menos una línea")
     @Valid
-    private List<LineaItem> lineas;
+    private List<LineaNested> lineas;
 
-    public Long getClienteId() {
-        return clienteId;
+    public ClienteNested getCliente() {
+        return cliente;
     }
 
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
+    public void setCliente(ClienteNested cliente) {
+        this.cliente = cliente;
     }
 
-    public List<LineaItem> getLineas() {
+    public List<LineaNested> getLineas() {
         return lineas;
     }
 
-    public void setLineas(List<LineaItem> lineas) {
+    public void setLineas(List<LineaNested> lineas) {
         this.lineas = lineas;
     }
 
-    public static class LineaItem {
+    public static class ClienteNested {
 
-        @NotNull(message = "productoId es obligatorio")
-        private Long productoId;
+        @NotNull(message = "clienteid es obligatorio")
+        @JsonProperty("clienteid")
+        private Long clienteid;
+
+        public Long getClienteid() {
+            return clienteid;
+        }
+
+        public void setClienteid(Long clienteid) {
+            this.clienteid = clienteid;
+        }
+    }
+
+    public static class LineaNested {
 
         @NotNull
         @Min(value = 1, message = "cantidad debe ser >= 1")
         private Integer cantidad;
 
-        public Long getProductoId() {
-            return productoId;
-        }
-
-        public void setProductoId(Long productoId) {
-            this.productoId = productoId;
-        }
+        @NotNull(message = "producto es obligatorio en cada línea")
+        @Valid
+        private ProductoNested producto;
 
         public Integer getCantidad() {
             return cantidad;
@@ -55,6 +68,29 @@ public class CrearComprobanteRequest {
 
         public void setCantidad(Integer cantidad) {
             this.cantidad = cantidad;
+        }
+
+        public ProductoNested getProducto() {
+            return producto;
+        }
+
+        public void setProducto(ProductoNested producto) {
+            this.producto = producto;
+        }
+    }
+
+    public static class ProductoNested {
+
+        @NotNull(message = "productoid es obligatorio")
+        @JsonProperty("productoid")
+        private Long productoid;
+
+        public Long getProductoid() {
+            return productoid;
+        }
+
+        public void setProductoid(Long productoid) {
+            this.productoid = productoid;
         }
     }
 }
